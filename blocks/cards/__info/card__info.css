@@ -1,0 +1,13 @@
+.card__info {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: space-between;
+  border-radius: 0 0 10px 10px;
+}
+
+@media screen and (max-width: 762px) {
+  .card__info {
+      width: 282px;
+  }
+}

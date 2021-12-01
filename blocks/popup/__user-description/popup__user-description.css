@@ -1,0 +1,13 @@
+.popup__user-description {
+  min-width: 358px;
+  min-height: 46px;
+  border: none;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 762px) {
+  .popup__user-description {
+      min-width: 238px;
+      min-height: 57px;
+  }
+}
