@@ -2,7 +2,7 @@
   font-weight: 900;
   font-size: 24px;
   line-height: 28px;
-  margin: 26px 0 24px 21px;
+  padding-left: 22px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

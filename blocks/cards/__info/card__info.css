@@ -1,8 +1,10 @@
 .card__info {
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
-  display: flex;
+  display: grid;
+  grid-template-columns: 235px 45px;
   justify-content: space-between;
+  align-items: center;
   border-radius: 0 0 10px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
