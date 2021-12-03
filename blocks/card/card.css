@@ -1,16 +1,16 @@
-.card__item {
+.card {
   position: relative;
   max-width: 282px;
 }
 
 @media screen and (max-width: 762px) {
-  .card__item {
+  .card {
       margin: 20px auto 0;
   }
 }
 
 @media screen and (max-width: 762px) {
-  .card__item:first-of-type {
+  .card:first-of-type {
       margin: 36px auto 0;
   }
 }

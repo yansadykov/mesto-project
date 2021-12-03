@@ -4,13 +4,13 @@
 }
 
 @media (min-width: 763px) and (max-width: 1274px) {
-  .main {
+  .content {
       max-width: 750px;
   }
 }
 
 @media screen and (max-width: 762px) {
-  .main {
+  .content {
       max-width: 320px;
   }
 }

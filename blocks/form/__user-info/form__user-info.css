@@ -1,0 +1,9 @@
+.form__user-info_name {
+    min-width: 358px;
+}
+
+@media screen and (max-width: 762px) {
+    .form__user-info_name {
+        min-width: 238px;
+    }
+}

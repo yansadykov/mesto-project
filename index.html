@@ -26,7 +26,7 @@
             </section>
 
             <section class="cards">
-                <div class="card__item">
+                <div class="card">
                     <img class="card__img" src="./images/dombay.jpeg" alt="Домбай" />
                     <div class="card__info">
                         <h2 class="card__title">Домбай</h2>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <div class="card__item">
+                <div class="card">
                     <img class="card__img" src="./images/elbrus.jpeg" alt="Гора Эльбрус" />
                     <div class="card__info">
                         <h2 class="card__title">Гора Эльбрус</h2>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="card__item">
+                <div class="card">
                     <img class="card__img" src="./images/karachaevsk.jpeg" alt="Карачаевск" />
                     <div class="card__info">
                         <h2 class="card__title">Карачаевск</h2>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="card__item">
+                <div class="card">
                     <img class="card__img" src="./images/dombay.jpeg" alt="Домбай" />
                     <div class="card__info">
                         <h2 class="card__title">Домбай</h2>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <div class="card__item">
+                <div class="card">
                     <img class="card__img" src="./images/elbrus.jpeg" alt="Гора Эльбрус" />
                     <div class="card__info">
                         <h2 class="card__title">Гора Эльбрус</h2>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <div class="card__item">
+                <div class="card">
                     <img class="card__img" src="./images/karachaevsk.jpeg" alt="Карачаевск" />
                     <div class="card__info">
                         <h2 class="card__title">Карачаево-Черкессия</h2>
@@ -80,11 +80,12 @@
             <div class="popup__window">
                 <button class="popup__close-btn"></button>
                 <h2 class="popup__title">Редактировать профиль</h2>
-                <form class="popup__form">
-                    <input class="popup__user-name" type="text" placeholder="Жак-Ив Кусто" required />
-                    <input class="popup__user-description" type="text" placeholder="Исследователь океана" />
+                <form class="form" name="userInfo">
+                    <input class="form__user-info form__user-info_name" type="text" name="name" placeholder="Жак-Ив Кусто" required />
+                    <input class="form__user-info form__user-info_description" type="text" name="description" placeholder="Исследователь океана" />
+                    <button class="form__save" type="submit">Сохранить</button>
                 </form>
-                <button class="popup__save">Сохранить</button>
+                
             </div>
         </div>
 

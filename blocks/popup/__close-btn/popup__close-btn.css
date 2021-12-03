@@ -9,6 +9,11 @@
     width: 32px;
 }
 
+.popup__close-btn:hover {
+    cursor: pointer;
+    opacity: .6;
+}
+
 .popup__close-btn::before {
     position: absolute;
     content: "";
