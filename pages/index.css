@@ -39,6 +39,4 @@
 
 @import url("../blocks/form/form.css");
 @import url("../blocks/form/__user-info/form__user-info.css");
-@import url("../blocks/form/__user-info/_description/form__user-info_description.css");
-@import url("../blocks/form/__user-info/_name/form__user-info_name.css");
 @import url("../blocks/form/__save/form__save.css");
