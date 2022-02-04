@@ -1,6 +1,6 @@
 .popup {
   background: #00000080;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
@@ -10,4 +10,7 @@
   right: 0;
   bottom: 0;
   flex-direction: column;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s linear;
 }
