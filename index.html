@@ -26,7 +26,7 @@
             </section>
 
             <section class="cards">
-                <div class="card">
+             <!--   <div class="card">
                     <img class="card__img" src="./images/dombay.jpeg" alt="Домбай" />
                     <div class="card__info">
                         <h2 class="card__title">Домбай</h2>
@@ -67,12 +67,29 @@
                 </div>
 
                 <div class="card">
+                    <button class="card__delete" type="button"></button>
                     <img class="card__img" src="./images/karachaevsk.jpeg" alt="Карачаевск" />
                     <div class="card__info">
                         <h2 class="card__title">Карачаево-Черкессия</h2>
                         <button class="card__like" type="button"></button>
                     </div>
-                </div>
+                </div> -->
+
+                <template id="card-template">
+                    <div class="card card-item">
+                        <button class="card__delete" type="button"></button>
+                        <img class="card__img" src="" alt="">
+                        <div class="card__info">
+                            <h2 class="card__title"></h2>
+                            <button class="card__like" type="button"></button>
+                        </div>
+                    </div>
+                </template>
+
+           
+
+                
+
             </section>
         </main>
 
@@ -81,11 +98,32 @@
                 <button class="popup__close-btn" type="button"></button>
                 <h2 class="popup__title">Редактировать профиль</h2>
                 <form class="form" name="user-info">
-                    <input class="form__user-info" type="text" name="name" placeholder="Жак-Ив Кусто" required />
-                    <input class="form__user-info" type="text" name="description" placeholder="Исследователь океана" />
+                    <input class="form__user-info" type="text" name="name" id="name" placeholder="Жак-Ив Кусто" required />
+                    <input class="form__user-info" type="text" name="description" id="description" placeholder="Исследователь океана" />
                     <button class="form__save" type="submit">Сохранить</button>
                 </form>
                 
+            </div>
+        </div>
+
+
+        <div class="popup" id="item-form">
+            <div class="popup__window">
+                <button class="popup__close-btn" id="photo-close-btn" type="button"></button>
+                <h2 class="popup__title">Новое место</h2>
+                <form class="form" name="user-info" id="new-card-form">
+                    <input class="form__user-info" type="text" name="name" id="card-name" placeholder="Название" required />
+                    <input class="form__user-info" type="text" name="link" id="card-link" placeholder="Ссылка на картинку" />
+                    <button class="form__save" type="submit">Создать</button>
+                </form>
+            </div>
+        </div>  
+
+        <div class="popup" id="popup-pic-open">
+            <div class="popup-picture">
+                <button class="popup__close-btn popup-picture__close-btn" type="button"></button>
+                <img class="popup-picture__img" src="" alt="">
+                <p class="popup-picture__title"></p>
             </div>
         </div>
 
@@ -94,5 +132,6 @@
         <footer class="footer">
             <p class="footer__text">&copy; 2020 Mesto Russia</p>
         </footer>
+        <script src="./scripts/scripts.js"></script>
     </body>
 </html>
