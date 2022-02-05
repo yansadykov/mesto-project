@@ -101,6 +101,7 @@ function createCard(item) {
     const cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector(".card__title").textContent = item.name;
     cardElement.querySelector(".card__img").src = item.link;
+    cardElement.querySelector(".card__img").alt = item.name;
 
     // удаляем карточку
     const cardDeleteBtn = cardElement.querySelector(".card__delete");
@@ -120,6 +121,7 @@ function createCard(item) {
     cardImg.addEventListener("click", () => {
         popupPicImg.src = item.link;
         popupPicTitle.textContent = item.name;
+        popupPicImg.alt = item.name;
         openPopup(popupPicOpen);
     });
     return cardElement;
