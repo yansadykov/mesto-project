@@ -1,6 +1,6 @@
 // открытие-закрыте модального окна при нажатии кнопки редактировать
 
-const popup = document.querySelector(".popup");
+const profilePopup = document.querySelector(".profile-popup");
 const popupWindow = document.querySelector(".popup_window");
 const popupCloseBtn = document.querySelector(".popup__close-btn");
 const formName = document.querySelector("#name");
@@ -11,19 +11,24 @@ const profileEditBtn = document.querySelector(".profile__edit-btn");
 const profileCloseBtn = document.querySelector(".popup__close-btn");
 const form = document.querySelector(".form");
 
-function openPopup() {
+
+function openPopup (popupName) {
+    popupName.classList.add("popup_opened");
+}
+
+function closePopup(popupName) {
+    popupName.classList.remove("popup_opened");
+}
+
+profileEditBtn.addEventListener("click", () => {
     formName.value = userName.textContent;
     formDescription.value = userDescription.textContent;
-    popup.classList.add("popup_opened");
-}
+    openPopup(profilePopup);
+});
 
-profileEditBtn.addEventListener("click", openPopup);
-
-function closePopup() {
-    popup.classList.remove("popup_opened");
-}
-
-popupCloseBtn.addEventListener("click", closePopup);
+popupCloseBtn.addEventListener("click", () => {
+    closePopup(profilePopup);
+});
 
 //редактирование профиля
 
@@ -31,7 +36,6 @@ function submitFormHandler(evt) {
     evt.preventDefault();
     userName.textContent = formName.value;
     userDescription.textContent = formDescription.value;
-    closePopup();
 }
 form.addEventListener("submit", submitFormHandler);
 
@@ -69,15 +73,14 @@ const itemForm = document.querySelector("#item-form");
 const photoAddBtn = document.querySelector(".profile__photo-add-btn");
 const photoCloseBtn = document.querySelector("#photo-close-btn");
 
-function openItemForm() {
-    itemForm.classList.add("popup_opened");
-}
-photoAddBtn.addEventListener("click", openItemForm);
 
-function closeItemForm() {
-    itemForm.classList.remove("popup_opened");
-}
-photoCloseBtn.addEventListener("click", closeItemForm);
+photoAddBtn.addEventListener("click", () => {
+    openPopup(itemForm);
+});
+
+photoCloseBtn.addEventListener("click", () => {
+    closePopup(itemForm);
+});
 
 //new card
 const cardTemplate = document.querySelector("#card-template").content.querySelector(".card-item");
@@ -91,6 +94,7 @@ const newCardForm = document.querySelector("#new-card-form");
 const popupPicImg = document.querySelector(".popup-picture__img");
 const popupPicTitle = document.querySelector(".popup-picture__title");
 const popupPicOpen = document.querySelector("#popup-pic-open");
+const popupPicClsBtn = document.querySelector(".popup-picture__close-btn");
 
 function createCard(item) {
     const cardElement = cardTemplate.cloneNode(true);
@@ -115,17 +119,15 @@ function createCard(item) {
     cardImg.addEventListener("click", () => {
         popupPicImg.src = item.link;
         popupPicTitle.textContent = item.name;
-        popupPicOpen.classList.add("popup_opened");
+        openPopup(popupPicOpen);
     });
-
-    const popupPicClsBtn = document.querySelector(".popup-picture__close-btn");
-    popupPicClsBtn.addEventListener("click", () => {
-        popupPicOpen.classList.remove("popup_opened");
-    });
-
-    //cardContainer.prepend(cardElement);
     return cardElement;
 }
+
+
+popupPicClsBtn.addEventListener("click", () => {
+    closePopup(popupPicOpen);
+});
 
 const cardItem = initialCards.map((item) => {
     return createCard(item);
@@ -135,7 +137,7 @@ const submitFormHandlerCard = (evt) => {
     evt.preventDefault();
     const newCard = createCard({ name: cardName.value, link: cardLink.value });
     cardContainer.prepend(newCard);
-    closeItemForm();
+    closePopup(itemForm);
     cardName.value = "";
     cardLink.value = "";
     return newCard;
