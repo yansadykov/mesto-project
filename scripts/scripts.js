@@ -36,6 +36,7 @@ function submitFormHandler(evt) {
     evt.preventDefault();
     userName.textContent = formName.value;
     userDescription.textContent = formDescription.value;
+    closePopup(profilePopup);
 }
 form.addEventListener("submit", submitFormHandler);
 
