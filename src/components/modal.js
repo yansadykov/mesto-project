@@ -1,4 +1,4 @@
-import { openPopup, closePopup } from "./utils.js";
+import { openPopup, closePopup, renderLoading } from "./utils.js";
 import { fetchSetAvatar, fetchSetUserInfo } from "./api.js";
 
 const profileTitle = document.querySelector(".profile__title");
@@ -9,9 +9,9 @@ const pictureLink = document.querySelector("#profilepicture");
 const profilePopup = document.querySelector(".profile-popup");
 const profileSubmitButton = document.querySelector("#profilesubmitbutton");
 const profilePicSubmitButton = document.querySelector("#profilepicsubmitbutton");
-const cardSubmitButton = document.querySelector("#addcardbutton");
 const profilePicPopup = document.querySelector(".popup-profilepic");
 const profileImage = document.querySelector("#profileavatar");
+const addCardPopup = document.querySelector("#item-form");
 
 export function openProfilePopup() {
     username.value = profileTitle.textContent;
@@ -49,12 +49,6 @@ export function openEditProfilePic() {
     openPopup(profilePicPopup);
 }
 
-function renderLoading(isLoading, someButton) {
-    if (isLoading) {
-        someButton.textContent = "Сохранение...";
-    } else if (someButton === cardSubmitButton) {
-        someButton.textContent = "Создать";
-    } else {
-        someButton.textContent = "Сохранить";
-    }
+export function openAddCardPopup() {
+    openPopup(addCardPopup);
 }

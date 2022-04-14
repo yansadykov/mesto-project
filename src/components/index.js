@@ -1,9 +1,9 @@
 import "../pages/index.css";
 
 import { fetchGetUserInfo, fetchInitialCards } from "./api.js";
-import { createCard, handleAddCardFormSubmit, openAddCardPopup } from "./card.js";
+import { createCard, handleAddCardFormSubmit } from "./card.js";
 
-import { openProfilePopup, handleProfileFormSubmit, openEditProfilePic, handleEditProfilePic } from "./profile.js";
+import { openProfilePopup, handleProfileFormSubmit, openEditProfilePic, handleEditProfilePic, openAddCardPopup } from "./modal.js";
 
 import { enableValidation } from "./validate.js";
 import { closePopup } from "./utils.js";

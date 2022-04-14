@@ -1,5 +1,5 @@
 import { fetchHandleLikes, fetchAddNewCard, fetchDeleteCard } from "./api.js";
-import { openPopup, closePopup } from "./utils.js";
+import { openPopup, closePopup, renderLoading } from "./utils.js";
 
 const popupImage = document.querySelector(".popup-picture__img");
 const popupImageCaption = document.querySelector(".popup-picture__title");
@@ -37,7 +37,8 @@ export function createCard({ name, link, _id, owner, likes }, myId) {
         cardDeleteButton.addEventListener("click", () => {
             fetchDeleteCard(_id).then(() => {
                 cardElement.remove();
-            });
+            })
+            .catch((err) => console.log(err));
         });
     } else {
         cardDeleteButton.style.display = "none";
@@ -87,20 +88,10 @@ export function handleAddCardFormSubmit(evt) {
         .finally(() => renderLoading(false, cardSubmitButton));
 }
 
-export function openAddCardPopup() {
-    openPopup(addCardPopup);
-}
+
 
 export function openImagePopup() {
     openPopup(imagePopup);
 }
 
-function renderLoading(isLoading, someButton) {
-    if (isLoading) {
-        someButton.textContent = "Сохранение...";
-    } else if (someButton === cardSubmitButton) {
-        someButton.textContent = "Создать";
-    } else {
-        someButton.textContent = "Сохранить";
-    }
-}
+
