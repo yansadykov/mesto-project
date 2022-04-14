@@ -59,15 +59,15 @@ export const fetchAddNewCard = (placename, imagelink) => {
     }).then(renderError);
 };
 
-export const fetchDeleteCard = (id) => {
-    return fetch(`${config.baseUrl}/cards/${id}`, {
+export const fetchDeleteCard = (newCard) => {
+    return fetch(`${config.baseUrl}/cards/${newCard._id}`, {
         method: "DELETE",
         headers: config.headers,
     }).then(renderError);
 };
 
-export const fetchHandleLikes = (id, method) => {
-    return fetch(`${config.baseUrl}/cards/likes/${id}`, {
+export const fetchHandleLikes = (newCard, method) => {
+    return fetch(`${config.baseUrl}/cards/likes/${newCard._id}`, {
         method: method,
         headers: config.headers,
     }).then(renderError);

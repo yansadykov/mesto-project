@@ -1,6 +1,6 @@
 import "../pages/index.css";
 
-import { fetchGetUserInfo, fetchInitialCards } from "./api.js";
+import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes } from "./api.js";
 import { createCard, handleAddCardFormSubmit } from "./card.js";
 
 import { openProfilePopup, handleProfileFormSubmit, openEditProfilePic, handleEditProfilePic, openAddCardPopup } from "./modal.js";
@@ -32,11 +32,37 @@ Promise.all([fetchGetUserInfo(), fetchInitialCards()])
         profileSubtitle.textContent = userData.about;
         profileImage.src = userData.avatar;
 
+        const handleLikes = (evt, cardLikes, newCard, myId) => {
+            const method = newCard.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
+            
+            fetchHandleLikes(newCard, method)
+                .then((data) => {
+                    newCard.likes = data.likes;
+                    cardLikes.textContent = newCard.likes.length;
+        
+                    if (newCard.likes.some((like) => like._id === myId)) {
+                        evt.target.classList.add("card__like_active");
+                    } else {
+                        evt.target.classList.remove("card__like_active");
+                    }
+                })
+                .catch((err) => console.log(err));
+        }
+
+        const deleteCard = (evt, newCard) => {
+            fetchDeleteCard(newCard)
+                    .then(() => {
+                        evt.target.closest(".card-item").remove();
+                    })
+                    .catch((err) => console.log(err));
+        }
+        
+
         const cards = cardsData.map((card) => {
-            return createCard(card, userData._id);
+            return createCard(card, userData._id, handleLikes, deleteCard);
         });
 
-        elements.append(...cards);
+        elements.prepend(...cards);
     })
     .catch((err) => console.log(err));
 
