@@ -38,7 +38,7 @@ Promise.all([fetchGetUserInfo(), fetchInitialCards()])
         profileImage.src = userData.avatar;
 
         const cards = cardsData.map((card) => {
-            return createCard(card, userData._id, handleLikes);
+            return createCard(card, userData._id);
         });
 
         elements.prepend(...cards);
