@@ -1,12 +1,12 @@
 import "../pages/index.css";
 
-import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes } from "./api.js";
-import { createCard, handleAddCardFormSubmit } from "./card.js";
+import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard } from "./api.js";
+import { createCard } from "./card.js";
 
 import { openProfilePopup, handleProfileFormSubmit, openEditProfilePic, handleEditProfilePic, openAddCardPopup } from "./modal.js";
 
 import { enableValidation } from "./validate.js";
-import { closePopup } from "./utils.js";
+import { closePopup, renderLoading } from "./utils.js";
 
 const popups = document.querySelectorAll(".popup");
 
@@ -21,8 +21,13 @@ const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profileImage = document.querySelector(".profile__avatar");
 
-const addCardForm = document.querySelector("#new-card-form");
 const addCardButton = document.querySelector(".profile__photo-add-btn");
+
+const addCardPopup = document.querySelector("#item-form");
+const addCardForm = document.querySelector("#new-card-form");
+const imageInput = document.querySelector("#imagelink");
+const placeInput = document.querySelector("#placename");
+const cardSubmitButton = document.querySelector("#addcardbutton");
 
 const elements = document.querySelector(".cards");
 
@@ -32,39 +37,55 @@ Promise.all([fetchGetUserInfo(), fetchInitialCards()])
         profileSubtitle.textContent = userData.about;
         profileImage.src = userData.avatar;
 
-        const handleLikes = (evt, cardLikes, newCard, myId) => {
-            const method = newCard.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
-            
-            fetchHandleLikes(newCard, method)
-                .then((data) => {
-                    newCard.likes = data.likes;
-                    cardLikes.textContent = newCard.likes.length;
-        
-                    if (newCard.likes.some((like) => like._id === myId)) {
-                        evt.target.classList.add("card__like_active");
-                    } else {
-                        evt.target.classList.remove("card__like_active");
-                    }
-                })
-                .catch((err) => console.log(err));
-        }
-
-        const deleteCard = (evt, newCard) => {
-            fetchDeleteCard(newCard)
-                    .then(() => {
-                        evt.target.closest(".card-item").remove();
-                    })
-                    .catch((err) => console.log(err));
-        }
-        
-
         const cards = cardsData.map((card) => {
-            return createCard(card, userData._id, handleLikes, deleteCard);
+            return createCard(card, userData._id, handleLikes);
         });
 
         elements.prepend(...cards);
     })
     .catch((err) => console.log(err));
+
+function handleAddCardFormSubmit(evt) {
+    evt.preventDefault();
+    renderLoading(true, cardSubmitButton);
+    fetchAddNewCard(placeInput.value, imageInput.value)
+        .then((card) => {
+            elements.prepend(createCard(card, card.owner._id));
+        })
+        .then(() => {
+            closePopup(addCardPopup);
+            addCardForm.reset();
+            cardSubmitButton.classList.add("form__save_inactive");
+            cardSubmitButton.disabled = true;
+        })
+        .catch((err) => console.log(err))
+        .finally(() => renderLoading(false, cardSubmitButton));
+}
+
+export const handleLikes = (likeButton, cardLikes, newCard, myId) => {
+    const method = newCard.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
+
+    fetchHandleLikes(newCard, method)
+        .then((data) => {
+            newCard.likes = data.likes;
+            cardLikes.textContent = newCard.likes.length;
+
+            if (newCard.likes.some((like) => like._id === myId)) {
+                likeButton.classList.add("card__like_active");
+            } else {
+                likeButton.classList.remove("card__like_active");
+            }
+        })
+        .catch((err) => console.log(err));
+};
+
+export function deleteCard(evt, newCard) {
+    fetchDeleteCard(newCard)
+        .then(() => {
+            evt.target.closest(".card-item").remove();
+        })
+        .catch((err) => console.log(err));
+}
 
 popups.forEach((popup) => {
     popup.addEventListener("mousedown", (evt) => {
