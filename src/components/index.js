@@ -1,12 +1,12 @@
 import "../pages/index.css";
 
-import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard } from "./api.js";
+import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard, fetchSetUserInfo } from "./api.js";
 import { createCard } from "./card.js";
 
-import { openProfilePopup, handleProfileFormSubmit, openEditProfilePic, handleEditProfilePic, openAddCardPopup } from "./modal.js";
+import { openEditProfilePic, handleEditProfilePic, openAddCardPopup } from "./modal.js";
 
 import { enableValidation } from "./validate.js";
-import { closePopup, renderLoading } from "./utils.js";
+import { closePopup, openPopup, renderLoading } from "./utils.js";
 
 const popups = document.querySelectorAll(".popup");
 
@@ -16,10 +16,17 @@ const profileForm = document.querySelector("#profileform");
 const editProfileButton = document.querySelector(".profile__edit-btn");
 const editProfilePicForm = document.querySelector("#profilepicform");
 const editProfilePicButton = document.querySelector("#editprofilepicbutton");
+const profilePopup = document.querySelector(".profile-popup");
+
 
 const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profileImage = document.querySelector(".profile__avatar");
+const profileSubmitButton = document.querySelector("#profilesubmitbutton");
+
+const username = document.querySelector("#username");
+const usernameInfo = document.querySelector("#usernameinfo");
+
 
 const addCardButton = document.querySelector(".profile__photo-add-btn");
 
@@ -85,6 +92,26 @@ export function deleteCard(evt, newCard) {
             evt.target.closest(".card-item").remove();
         })
         .catch((err) => console.log(err));
+}
+
+function openProfilePopup() {
+    username.value = profileTitle.textContent;
+    usernameInfo.value = profileSubtitle.textContent;
+    openPopup(profilePopup);
+}
+
+function handleProfileFormSubmit(evt) {
+    evt.preventDefault();
+    renderLoading(true, profileSubmitButton);
+    fetchSetUserInfo(username.value, usernameInfo.value)
+        .then(() => {
+            profileTitle.textContent = username.value;
+            profileSubtitle.textContent = usernameInfo.value;
+
+            closePopup(profilePopup);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => renderLoading(false, profileSubmitButton));
 }
 
 popups.forEach((popup) => {
