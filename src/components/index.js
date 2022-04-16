@@ -3,7 +3,7 @@ import "../pages/index.css";
 import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard, fetchSetUserInfo } from "./api.js";
 import { createCard } from "./card.js";
 
-import { openEditProfilePic, handleEditProfilePic, openAddCardPopup } from "./modal.js";
+import { openEditProfilePic, openAddCardPopup } from "./modal.js";
 
 import { enableValidation } from "./validate.js";
 import { closePopup, openPopup, renderLoading } from "./utils.js";
@@ -18,6 +18,8 @@ const editProfilePicForm = document.querySelector("#profilepicform");
 const editProfilePicButton = document.querySelector("#editprofilepicbutton");
 const profilePopup = document.querySelector(".profile-popup");
 
+const pictureLink = document.querySelector("#profilepicture");
+const profilePicSubmitButton = document.querySelector("#profilepicsubmitbutton");
 
 const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
@@ -132,6 +134,20 @@ popupCloseBtn.forEach((clsBtn) => {
         });
     });
 });
+
+
+function handleEditProfilePic(evt) {
+    evt.preventDefault();
+    renderLoading(true, profilePicSubmitButton);
+    fetchSetAvatar(pictureLink.value)
+        .then((data) => {
+            profileImage.src = data.avatar;
+            closePopup(profilePicPopup);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => renderLoading(false, profilePicSubmitButton));
+}
+
 
 enableValidation({
     formSelector: ".form",
