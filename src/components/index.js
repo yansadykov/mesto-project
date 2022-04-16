@@ -1,6 +1,6 @@
 import "../pages/index.css";
 
-import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard, fetchSetUserInfo } from "./api.js";
+import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard, fetchSetUserInfo, fetchSetAvatar } from "./api.js";
 import { createCard } from "./card.js";
 
 import { openEditProfilePic, openAddCardPopup } from "./modal.js";
@@ -17,6 +17,7 @@ const editProfileButton = document.querySelector(".profile__edit-btn");
 const editProfilePicForm = document.querySelector("#profilepicform");
 const editProfilePicButton = document.querySelector("#editprofilepicbutton");
 const profilePopup = document.querySelector(".profile-popup");
+const profilePicPopup = document.querySelector(".popup-profilepic");
 
 const pictureLink = document.querySelector("#profilepicture");
 const profilePicSubmitButton = document.querySelector("#profilepicsubmitbutton");
