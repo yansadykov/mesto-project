@@ -1,5 +1,5 @@
 import { openPopup } from "./utils.js";
-import { deleteCard, handleLikes } from "./index.js";
+import { handleLikesServer, removeCardServer } from "./api.js"
 
 const popupImage = document.querySelector(".popup-picture__img");
 const popupImageCaption = document.querySelector(".popup-picture__title");
@@ -8,9 +8,33 @@ const cardTemplate = document.querySelector("#card-template").content;
 
 const imagePopup = document.querySelector("#popup-pic-open");
 
-//const elements = document.querySelector(".cards");
 
-export function createCard(newCard, myId, handleLikesFunc) {
+const handleLikes = (likeButton, cardLikes, newCard, myId) => {
+    const method = newCard.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
+
+    handleLikesServer(newCard, method)
+        .then((data) => {
+            newCard.likes = data.likes;
+            cardLikes.textContent = newCard.likes.length;
+
+            if (newCard.likes.some((like) => like._id === myId)) {
+                likeButton.classList.add("card__like_active");
+            } else {
+                likeButton.classList.remove("card__like_active");
+            }
+        })
+        .catch((err) => console.log(err));
+};
+
+function deleteCard(evt, newCard) {
+    removeCardServer(newCard)
+        .then(() => {
+            evt.target.closest(".card-item").remove();
+        })
+        .catch((err) => console.log(err));
+}
+
+export function createCard(newCard, myId) {
     const cardElement = cardTemplate.querySelector(".card-item").cloneNode(true);
     const cardImage = cardElement.querySelector(".card__img");
     const cardDeleteButton = cardElement.querySelector(".card__delete");

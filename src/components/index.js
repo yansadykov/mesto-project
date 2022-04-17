@@ -1,6 +1,6 @@
 import "../pages/index.css";
 
-import { fetchGetUserInfo, fetchInitialCards, fetchDeleteCard, fetchHandleLikes, fetchAddNewCard, fetchSetUserInfo, fetchSetAvatar } from "./api.js";
+import { getUserInfo, initialCards, addNewCard, setUserInfo, setAvatar } from "./api.js";
 import { createCard } from "./card.js";
 
 import { openEditProfilePic, openAddCardPopup } from "./modal.js";
@@ -9,8 +9,6 @@ import { enableValidation } from "./validate.js";
 import { closePopup, openPopup, renderLoading } from "./utils.js";
 
 const popups = document.querySelectorAll(".popup");
-
-const popupCloseBtn = document.querySelectorAll(".popup__close-btn");
 
 const profileForm = document.querySelector("#profileform");
 const editProfileButton = document.querySelector(".profile__edit-btn");
@@ -41,7 +39,7 @@ const cardSubmitButton = document.querySelector("#addcardbutton");
 
 const elements = document.querySelector(".cards");
 
-Promise.all([fetchGetUserInfo(), fetchInitialCards()])
+Promise.all([getUserInfo(), initialCards()])
     .then(([userData, cardsData]) => {
         profileTitle.textContent = userData.name;
         profileSubtitle.textContent = userData.about;
@@ -58,7 +56,7 @@ Promise.all([fetchGetUserInfo(), fetchInitialCards()])
 function handleAddCardFormSubmit(evt) {
     evt.preventDefault();
     renderLoading(true, cardSubmitButton);
-    fetchAddNewCard(placeInput.value, imageInput.value)
+    addNewCard(placeInput.value, imageInput.value)
         .then((card) => {
             elements.prepend(createCard(card, card.owner._id));
         })
@@ -72,30 +70,6 @@ function handleAddCardFormSubmit(evt) {
         .finally(() => renderLoading(false, cardSubmitButton));
 }
 
-export const handleLikes = (likeButton, cardLikes, newCard, myId) => {
-    const method = newCard.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
-
-    fetchHandleLikes(newCard, method)
-        .then((data) => {
-            newCard.likes = data.likes;
-            cardLikes.textContent = newCard.likes.length;
-
-            if (newCard.likes.some((like) => like._id === myId)) {
-                likeButton.classList.add("card__like_active");
-            } else {
-                likeButton.classList.remove("card__like_active");
-            }
-        })
-        .catch((err) => console.log(err));
-};
-
-export function deleteCard(evt, newCard) {
-    fetchDeleteCard(newCard)
-        .then(() => {
-            evt.target.closest(".card-item").remove();
-        })
-        .catch((err) => console.log(err));
-}
 
 function openProfilePopup() {
     username.value = profileTitle.textContent;
@@ -106,7 +80,7 @@ function openProfilePopup() {
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     renderLoading(true, profileSubmitButton);
-    fetchSetUserInfo(username.value, usernameInfo.value)
+    setUserInfo(username.value, usernameInfo.value)
         .then(() => {
             profileTitle.textContent = username.value;
             profileSubtitle.textContent = usernameInfo.value;
@@ -122,25 +96,16 @@ popups.forEach((popup) => {
         if (evt.target.classList.contains("popup_opened")) {
             closePopup(popup);
         }
-        if (evt.target.classList.contains("popup__close")) {
+        if (evt.target.classList.contains("popup__close-btn")) {
             closePopup(popup);
         }
     });
 });
 
-popupCloseBtn.forEach((clsBtn) => {
-    clsBtn.addEventListener("click", () => {
-        popups.forEach((popup) => {
-            closePopup(popup);
-        });
-    });
-});
-
-
 function handleEditProfilePic(evt) {
     evt.preventDefault();
     renderLoading(true, profilePicSubmitButton);
-    fetchSetAvatar(pictureLink.value)
+    setAvatar(pictureLink.value)
         .then((data) => {
             profileImage.src = data.avatar;
             closePopup(profilePicPopup);

@@ -6,21 +6,21 @@ const config = {
     },
 };
 
-const renderError = function (res) {
+const checkResponse = function (res) {
     if (res.ok) {
         return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-export const fetchGetUserInfo = () => {
+export const getUserInfo = () => {
     return fetch(`${config.baseUrl}/users/me`, {
         method: "GET",
         headers: config.headers,
-    }).then(renderError);
+    }).then(checkResponse);
 };
 
-export const fetchSetUserInfo = (userName, userInfo) => {
+export const setUserInfo = (userName, userInfo) => {
     return fetch(`${config.baseUrl}/users/me`, {
         method: "PATCH",
         headers: config.headers,
@@ -28,27 +28,27 @@ export const fetchSetUserInfo = (userName, userInfo) => {
             name: userName,
             about: userInfo,
         }),
-    }).then(renderError);
+    }).then(checkResponse);
 };
 
-export const fetchInitialCards = () => {
+export const initialCards = () => {
     return fetch(`${config.baseUrl}/cards`, {
         method: "GET",
         headers: config.headers,
-    }).then(renderError);
+    }).then(checkResponse);
 };
 
-export const fetchSetAvatar = (link) => {
+export const setAvatar = (link) => {
     return fetch(`${config.baseUrl}/users/me/avatar`, {
         method: "PATCH",
         headers: config.headers,
         body: JSON.stringify({
             avatar: link,
         }),
-    }).then(renderError);
+    }).then(checkResponse);
 };
 
-export const fetchAddNewCard = (placename, imagelink) => {
+export const addNewCard = (placename, imagelink) => {
     return fetch(`${config.baseUrl}/cards`, {
         method: "POST",
         headers: config.headers,
@@ -56,19 +56,19 @@ export const fetchAddNewCard = (placename, imagelink) => {
             name: placename,
             link: `${imagelink}`,
         }),
-    }).then(renderError);
+    }).then(checkResponse);
 };
 
-export const fetchDeleteCard = (newCard) => {
+export const removeCardServer = (newCard) => {
     return fetch(`${config.baseUrl}/cards/${newCard._id}`, {
         method: "DELETE",
         headers: config.headers,
-    }).then(renderError);
+    }).then(checkResponse);
 };
 
-export const fetchHandleLikes = (newCard, method) => {
+export const handleLikesServer = (newCard, method) => {
     return fetch(`${config.baseUrl}/cards/likes/${newCard._id}`, {
         method: method,
         headers: config.headers,
-    }).then(renderError);
+    }).then(checkResponse);
 };
