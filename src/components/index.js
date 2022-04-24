@@ -1,6 +1,7 @@
 import "../pages/index.css";
 
 import { api } from "./Api.js";
+import Card from "./card.js";
 import UserInfo from "./UserInfo.js";
 import { createCard } from "./card.js";
 
@@ -8,6 +9,7 @@ import { openEditProfilePic, openAddCardPopup } from "./modal.js";
 
 import { enableValidation } from "./validate.js";
 import { closePopup, openPopup, renderLoading } from "./utils.js";
+import Section from "./Section";
 
 const popups = document.querySelectorAll(".popup");
 
@@ -28,7 +30,7 @@ const profileSubmitButton = document.querySelector("#profilesubmitbutton");
 
 const username = document.querySelector("#username");
 const usernameInfo = document.querySelector("#usernameinfo");
-
+//const card = new Card(items, '.elements', myId)
 
 const addCardButton = document.querySelector(".profile__photo-add-btn");
 
@@ -42,16 +44,50 @@ const elements = document.querySelector(".cards");
 
 const userinfo = new UserInfo({ profileTitle, profileSubtitle });
 
+function handleDeleteCard(evt, cardId) {
+    removeCardServer(cardId)
+        .then(() => {
+            evt.target.closest(".card-item").remove();
+        })
+        .catch((err) => console.log(err));
+}
+
+function handleLikes(likeButton, cardLikes, cardInfo, myId) {
+    const method = cardInfo.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
+
+    handleLikesServer(cardInfo, method)
+        .then((data) => {
+            cardInfo.likes = data.likes;
+            cardLikes.textContent = cardInfo.likes.length;
+
+            if (cardInfo.likes.some((like) => like._id === myId)) {
+                likeButton.classList.add("card__like_active");
+            } else {
+                likeButton.classList.remove("card__like_active");
+            }
+        })
+        .catch((err) => console.log(err));
+}
+
+function handleCardClick () {
+    imagePopup.open()
+    // popupImage.alt = newCard.name;
+    // popupImage.src = cardImage.src;
+    // popupImageCaption.textContent = newCard.name;
+}
+
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([userData, cardsData]) => {
         userinfo.setUserInfo(userData);
         profileImage.src = userData.avatar;
 
-        const cards = cardsData.map((card) => {
-            return createCard(card, userData._id);
-        });
-
-        elements.prepend(...cards);
+        const cardsList = new Section({cardsData, 
+            renderer: (item) => {
+                const card = new Card(item, '#cardtemplate', handleCardClick, handleDeleteCard, handleLikes, userData._id);
+                const cardElement =  card.generate();
+                cardsList.setItem(cardElement);
+             }
+        }, '.cards')
     })
     .catch((err) => console.log(err));
 
