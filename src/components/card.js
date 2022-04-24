@@ -1,5 +1,5 @@
 import { openPopup } from "./utils.js";
-import { handleLikesServer, removeCardServer } from "./api.js"
+import { handleLikesServer, removeCardServer } from "./Api.js"
 
 const popupImage = document.querySelector(".popup-picture__img");
 const popupImageCaption = document.querySelector(".popup-picture__title");

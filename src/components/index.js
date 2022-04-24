@@ -1,6 +1,7 @@
 import "../pages/index.css";
 
-import { getUserInfo, initialCards, addNewCard, setUserInfo, setAvatar } from "./api.js";
+import { api } from "./Api.js";
+import UserInfo from "./UserInfo.js";
 import { createCard } from "./card.js";
 
 import { openEditProfilePic, openAddCardPopup } from "./modal.js";
@@ -39,10 +40,11 @@ const cardSubmitButton = document.querySelector("#addcardbutton");
 
 const elements = document.querySelector(".cards");
 
-Promise.all([getUserInfo(), initialCards()])
+const userinfo = new UserInfo({ profileTitle, profileSubtitle });
+
+Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([userData, cardsData]) => {
-        profileTitle.textContent = userData.name;
-        profileSubtitle.textContent = userData.about;
+        userinfo.setUserInfo(userData);
         profileImage.src = userData.avatar;
 
         const cards = cardsData.map((card) => {
