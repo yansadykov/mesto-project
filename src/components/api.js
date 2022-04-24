@@ -50,8 +50,8 @@ class Api{
         }).then((res) => this._checkResponse(res));
     }
 
-    removeCardServer(newCard){
-        return fetch(`${this._baseUrl}/cards/${newCard._id}`, {
+    removeCardServer(cardId){
+        return fetch(`${this._baseUrl}/cards/${cardId}`, {
             method: "DELETE",
             headers: this._headers,
         }).then((res) => this._checkResponse(res));
