@@ -65,7 +65,7 @@ class Card {
         });
 
         cardImage.addEventListener("click", () => { 
-            handleCardClick();
+            handleCardClick(this._cardInfo);
         });
     }
 }

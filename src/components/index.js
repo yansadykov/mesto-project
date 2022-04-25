@@ -10,6 +10,7 @@ import { openEditProfilePic, openAddCardPopup } from "./modal.js";
 import { enableValidation } from "./validate.js";
 import { closePopup, openPopup, renderLoading } from "./utils.js";
 import Section from "./Section";
+import PopupWithForm from "./PopupWithForm";
 
 const popups = document.querySelectorAll(".popup");
 
@@ -69,12 +70,43 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
         .catch((err) => console.log(err));
 }
 
-function handleCardClick () {
-    imagePopup.open()
-    // popupImage.alt = newCard.name;
-    // popupImage.src = cardImage.src;
-    // popupImageCaption.textContent = newCard.name;
+function handleCardClick (cardData) {
+    imagePopup.open(cardData)
 }
+
+
+const editProfilePicPopup = new PopupWithForm('.popup-profilepic', { 
+    handleFormSubmit: (formData) => {
+        renderLoading(true, profilePicSubmitButton);
+        api.setAvatar(formData)
+            .then((data) => {
+                profileImage.src = data.avatar;
+                editProfilePicPopup.close();
+            })
+            .catch((err) => console.log(err))
+            .finally(() => renderLoading(false, profilePicSubmitButton));
+    }
+});
+
+editProfilePicButton.addEventListener('click', () => {
+    editProfilePicPopup.open();
+});
+
+const editProfilePopup = new PopupWithForm('.profile-popup', {
+    handleFormSubmit: (formData) => {
+        renderLoading(true, profileSubmitButton);
+        setUserInfo(formData)
+            .then(() => {
+                profileTitle.textContent = username.value;
+                profileSubtitle.textContent = usernameInfo.value;
+    
+                closePopup(profilePopup);
+            })
+            .catch((err) => console.log(err))
+            .finally(() => renderLoading(false, profileSubmitButton));
+    }
+})
+
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([userData, cardsData]) => {
@@ -90,6 +122,8 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
         }, '.cards')
     })
     .catch((err) => console.log(err));
+
+
 
 function handleAddCardFormSubmit(evt) {
     evt.preventDefault();
@@ -109,48 +143,13 @@ function handleAddCardFormSubmit(evt) {
 }
 
 
+
 function openProfilePopup() {
     username.value = profileTitle.textContent;
     usernameInfo.value = profileSubtitle.textContent;
     openPopup(profilePopup);
 }
 
-function handleProfileFormSubmit(evt) {
-    evt.preventDefault();
-    renderLoading(true, profileSubmitButton);
-    setUserInfo(username.value, usernameInfo.value)
-        .then(() => {
-            profileTitle.textContent = username.value;
-            profileSubtitle.textContent = usernameInfo.value;
-
-            closePopup(profilePopup);
-        })
-        .catch((err) => console.log(err))
-        .finally(() => renderLoading(false, profileSubmitButton));
-}
-
-popups.forEach((popup) => {
-    popup.addEventListener("mousedown", (evt) => {
-        if (evt.target.classList.contains("popup_opened")) {
-            closePopup(popup);
-        }
-        if (evt.target.classList.contains("popup__close-btn")) {
-            closePopup(popup);
-        }
-    });
-});
-
-function handleEditProfilePic(evt) {
-    evt.preventDefault();
-    renderLoading(true, profilePicSubmitButton);
-    setAvatar(pictureLink.value)
-        .then((data) => {
-            profileImage.src = data.avatar;
-            closePopup(profilePicPopup);
-        })
-        .catch((err) => console.log(err))
-        .finally(() => renderLoading(false, profilePicSubmitButton));
-}
 
 
 enableValidation({

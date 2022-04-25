@@ -29,12 +29,12 @@ class Api{
         }).then((res) => this._checkResponse(res));
     }
 
-    setAvatar(link){
+    setAvatar(formData){
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: "PATCH",
             headers: this._headers,
             body: JSON.stringify({
-                avatar: link,
+                avatar: formData.profilepicture,
             }),
         }).then((res) => this._checkResponse(res));
     }
@@ -57,8 +57,8 @@ class Api{
         }).then((res) => this._checkResponse(res));
     }
 
-    handleLikesServer(cardId, method){
-        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+    handleLikesServer(cardInfo, method){
+        return fetch(`${this._baseUrl}/cards/likes/${cardInfo._id}`, {
             method: method,
             headers: this._headers,
         }).then((res) => this._checkResponse(res));
