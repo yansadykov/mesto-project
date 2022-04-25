@@ -1,9 +1,9 @@
 import "../pages/index.css";
 
 import { api } from "./Api.js";
-import Card from "./card.js";
+import Card from "./Card.js";
 import UserInfo from "./UserInfo.js";
-import { createCard } from "./card.js";
+//import { createCard } from "./card.js";
 
 import { openEditProfilePic, openAddCardPopup } from "./modal.js";
 
@@ -35,7 +35,7 @@ const usernameInfo = document.querySelector("#usernameinfo");
 
 const addCardButton = document.querySelector(".profile__photo-add-btn");
 
-const addCardPopup = document.querySelector("#item-form");
+//const addCardPopup = document.querySelector("#item-form");
 const addCardForm = document.querySelector("#new-card-form");
 const imageInput = document.querySelector("#imagelink");
 const placeInput = document.querySelector("#placename");
@@ -70,11 +70,6 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
         .catch((err) => console.log(err));
 }
 
-function handleCardClick (cardData) {
-    imagePopup.open(cardData)
-}
-
-
 const editProfilePicPopup = new PopupWithForm('.popup-profilepic', { 
     handleFormSubmit: (formData) => {
         renderLoading(true, profilePicSubmitButton);
@@ -96,16 +91,48 @@ const editProfilePopup = new PopupWithForm('.profile-popup', {
     handleFormSubmit: (formData) => {
         renderLoading(true, profileSubmitButton);
         setUserInfo(formData)
-            .then(() => {
-                profileTitle.textContent = username.value;
-                profileSubtitle.textContent = usernameInfo.value;
+            .then((data) => {
+                profileTitle.textContent = data.name;
+                profileSubtitle.textContent = data.description;
     
-                closePopup(profilePopup);
+                editProfilePopup.close();
             })
             .catch((err) => console.log(err))
             .finally(() => renderLoading(false, profileSubmitButton));
     }
 })
+
+editProfileButton.addEventListener('click', () =>{
+    username.value = profileTitle.textContent;
+    usernameInfo.value = profileSubtitle.textContent;
+    editProfilePopup.open();
+});
+
+const addCardPopup = new PopupWithForm('.new-card-popup', {
+    handleFormSubmit: (formData) => {
+        renderLoading(true, cardSubmitButton);
+        api.addNewCard(placeInput.value, imageInput.value)
+            .then((card) => {
+                const addedCard = new Card(card, '#cardtemplate', handleCardClick, handleDeleteCard, handleLikes, card.owner._id);
+                const cardElement = addedCard.generate();
+                elements.prepend(cardElement);
+            })
+            .then(() => {
+                closePopup(addCardPopup);
+                addCardForm.reset();
+                cardSubmitButton.classList.add("form__save_inactive");
+                cardSubmitButton.disabled = true;
+            })
+            .catch((err) => console.log(err))
+            .finally(() => renderLoading(false, cardSubmitButton));
+    }
+})
+
+function handleCardClick(cardData) {
+    imagePopup.open(cardData);
+}
+
+const imagePopup = new PopupWithImage('.popup-pic-open');
 
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -125,30 +152,31 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 
 
 
-function handleAddCardFormSubmit(evt) {
-    evt.preventDefault();
-    renderLoading(true, cardSubmitButton);
-    addNewCard(placeInput.value, imageInput.value)
-        .then((card) => {
-            elements.prepend(createCard(card, card.owner._id));
-        })
-        .then(() => {
-            closePopup(addCardPopup);
-            addCardForm.reset();
-            cardSubmitButton.classList.add("form__save_inactive");
-            cardSubmitButton.disabled = true;
-        })
-        .catch((err) => console.log(err))
-        .finally(() => renderLoading(false, cardSubmitButton));
-}
+// function handleAddCardFormSubmit(evt) {
+//     evt.preventDefault();
+//     renderLoading(true, cardSubmitButton);
+//     addNewCard(placeInput.value, imageInput.value)
+//         .then((card) => {
+//             elements.prepend(createCard(card, card.owner._id));
+//         })
+//         .then(() => {
+//             closePopup(addCardPopup);
+//             addCardForm.reset();
+//             cardSubmitButton.classList.add("form__save_inactive");
+//             cardSubmitButton.disabled = true;
+//         })
+//         .catch((err) => console.log(err))
+//         .finally(() => renderLoading(false, cardSubmitButton));
+// }
 
 
 
-function openProfilePopup() {
-    username.value = profileTitle.textContent;
-    usernameInfo.value = profileSubtitle.textContent;
-    openPopup(profilePopup);
-}
+
+// function openProfilePopup() {
+//     username.value = profileTitle.textContent;
+//     usernameInfo.value = profileSubtitle.textContent;
+//     openPopup(profilePopup);
+// }
 
 
 
@@ -159,12 +187,13 @@ enableValidation({
     inputErrorClass: "form__input_type_error",
     errorClass: "form__input-error_active",
     inactiveButtonClass: "form__save_inactive",
-});
+},
+form);
 
-profileForm.addEventListener("submit", handleProfileFormSubmit);
-editProfileButton.addEventListener("click", openProfilePopup);
+//profileForm.addEventListener("submit", handleProfileFormSubmit);
+//editProfileButton.addEventListener("click", openProfilePopup);
 editProfilePicButton.addEventListener("click", openEditProfilePic);
-editProfilePicForm.addEventListener("submit", handleEditProfilePic);
+//editProfilePicForm.addEventListener("submit", handleEditProfilePic);
 
-addCardForm.addEventListener("submit", handleAddCardFormSubmit);
+//addCardForm.addEventListener("submit", handleAddCardFormSubmit);
 addCardButton.addEventListener("click", openAddCardPopup);
