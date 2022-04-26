@@ -1,6 +1,6 @@
 import "../pages/index.css";
 
-import { api } from "./Api.js";
+import {api} from "./Api.js";
 import Card from "./Card.js";
 import UserInfo from "./UserInfo.js";
 import FormValidator from "./FormValidator.js";
@@ -52,7 +52,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
             renderer: (item) => {
                 const card = new Card(item, '#cardtemplate', handleCardClick, handleDeleteCard, handleLikes, userData._id);
                 const cardElement =  card.generate();
-                cardsList.setItem(cardElement);
+                cardsList.addItem(cardElement);
              }
         }, '.cards')
     })
