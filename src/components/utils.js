@@ -1,7 +1,3 @@
-const cardSubmitButton = document.querySelector("#addcardbutton");
-
-
-
 export function renderLoading(isLoading, someButton) {
     if (isLoading) {
         someButton.textContent = "Сохранение...";

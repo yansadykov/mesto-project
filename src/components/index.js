@@ -1,16 +1,12 @@
 import "../pages/index.css";
 
 import { api } from "./Api.js";
-import Card from "./card.js";
 import UserInfo from "./UserInfo.js";
-import { createCard } from "./card.js";
-
-import { openEditProfilePic, openAddCardPopup } from "./modal.js";
-
-import { enableValidation } from "./validate.js";
-import { closePopup, openPopup, renderLoading } from "./utils.js";
+import Card from "./card.js";
 import Section from "./Section";
 import PopupWithForm from "./PopupWithForm";
+import PopupWithImage from "./PopupWithImage.js";
+import { renderLoading } from "./utils.js";
 
 const popups = document.querySelectorAll(".popup");
 

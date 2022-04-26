@@ -11,13 +11,13 @@ class Api{
         }).then((res) => this._checkResponse(res));
     }
 
-    setUserInfo(userName, userInfo){
+    setUserInfo(formData){
         return fetch(`${this._baseUrl}/users/me`, {
             method: "PATCH",
             headers: this._headers,
             body: JSON.stringify({
-                name: userName,
-                about: userInfo,
+                name: formData.name,
+                about: formData.description,
             }),
         }).then((res) => this._checkResponse(res));
     }
