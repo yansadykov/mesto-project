@@ -1,16 +1,4 @@
-import { openPopup } from "./utils.js";
-import { handleLikesServer, removeCardServer } from "./Api.js"
-// import { data } from "autoprefixer";
-
-const popupImage = document.querySelector(".popup-picture__img");
-const popupImageCaption = document.querySelector(".popup-picture__title");
-
-const cardTemplate = document.querySelector("#card-template").content;
-
-const imagePopup = document.querySelector("#popup-pic-open");
-
-
-class Card {
+export default class Card {
     constructor(data, selector, handleCardClick, handleDeleteCard, handleLikes, myId){
         this._name = data.name;
         this._link = data.link;

@@ -23,7 +23,7 @@ class Api{
     }
 
     getInitialCards(){
-        return fetch(`${this_.baseUrl}/cards`, {
+        return fetch(`${this._baseUrl}/cards`, {
             method: "GET",
             headers: this._headers,
         }).then((res) => this._checkResponse(res));
