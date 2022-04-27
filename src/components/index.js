@@ -16,6 +16,8 @@ const usernameInfo = document.querySelector("#usernameinfo");
 
 const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
+// const profileTitleSelector = ".profile__title";
+// const profileSubtitleSelector = ".profile__subtitle";
 const profileImage = document.querySelector(".profile__avatar");
 
 const profileForm = document.querySelector("#profileform");
@@ -30,7 +32,7 @@ const profileSubmitButton = document.querySelector("#profilesubmitbutton");
 const editProfilePicButton = document.querySelector("#editprofilepicbutton");
 const profilePicSubmitButton = document.querySelector("#profilepicsubmitbutton");
 const addCardButton = document.querySelector(".profile__photo-add-btn");
-const cardSubmitButton = document.querySelector("#addcardbutton");
+export const cardSubmitButton = document.querySelector("#addcardbutton");
 
 const settings = {
     formSelector: ".form",
@@ -41,17 +43,19 @@ const settings = {
     inactiveButtonClass: "form__save_inactive",
 };
 
-const userinfo = new UserInfo({ profileTitle, profileSubtitle });
+const userinfo = new UserInfo({ usernameElementSelector: ".profile__title", usernameInfoElementSelector: ".profile__subtitle" });
+
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([userData, cardsData]) => {
         userinfo.setUserInfo(userData);
+        
         profileImage.src = userData.avatar;
 
         const cardsList = new Section({items: cardsData, 
             renderer: (item) => {
                 const card = new Card({data: item, myId: userData._id}, '#card-template', handleCardClick, handleDeleteCard, handleLikes);
-                const cardElement =  card.generate();
+                const cardElement = card.generate();
                 cardsList.addItem(cardElement);
              }
         }, '.cards')
@@ -108,22 +112,21 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
 
 const editProfilePopup = new PopupWithForm('.profile-popup', {
     handleFormSubmit: (formData) => {
-        renderLoading(true, profileSubmitButton);
-        setUserInfo(formData)
+        editProfilePopup.renderLoading(true, profileSubmitButton);
+        api.setUserInfo(formData)
             .then((data) => {
-                profileTitle.textContent = data.name;
-                profileSubtitle.textContent = data.description;
-    
-                editProfilePopup.setEventListeners();
+            userinfo.setUserInfo(data);
             })
             .catch((err) => console.log(err))
-            .finally(() => renderLoading(false, profileSubmitButton));
+            .finally(() => editProfilePopup.renderLoading(false, profileSubmitButton));
     }
-})
+});
+editProfilePopup.setEventListeners();
 
-editProfileButton.addEventListener('click', () =>{
-    username.value = profileTitle.textContent;
-    usernameInfo.value = profileSubtitle.textContent;
+editProfileButton.addEventListener('click', () => {
+    const newData = userinfo.getUserInfo();
+    username.value = newData.name;
+    usernameInfo.value = newData.about;
     editProfilePopup.open();
 });
 
@@ -132,14 +135,14 @@ editProfileButton.addEventListener('click', () =>{
 
 const editProfilePicPopup = new PopupWithForm('.popup-profilepic', { 
     handleFormSubmit: (formData) => {
-        renderLoading(true, profilePicSubmitButton);
+        editProfilePicPopup.renderLoading(true, profilePicSubmitButton);
         api.setAvatar(formData)
             .then((data) => {
                 profileImage.src = data.avatar;
                 editProfilePicPopup.close();
             })
             .catch((err) => console.log(err))
-            .finally(() => renderLoading(false, profilePicSubmitButton));
+            .finally(() => editProfilePicPopup.renderLoading(false, profilePicSubmitButton));
     }
 });
 
@@ -151,7 +154,7 @@ editProfilePicButton.addEventListener('click', () => {
 
 const addCardPopup = new PopupWithForm('.new-card-popup', {
     handleFormSubmit: (formData) => {
-        renderLoading(true, cardSubmitButton);
+        addCardPopup.renderLoading(true, cardSubmitButton);
         api.addNewCard(placeInput.value, imageInput.value)
             .then((card) => {
                 const addedCard = new Card(card, '#cardtemplate', handleCardClick, handleDeleteCard, handleLikes, card.owner._id);
@@ -165,7 +168,7 @@ const addCardPopup = new PopupWithForm('.new-card-popup', {
                 cardSubmitButton.disabled = true;
             })
             .catch((err) => console.log(err))
-            .finally(() => renderLoading(false, cardSubmitButton));
+            .finally(() => addCardPopup.renderLoading(false, cardSubmitButton));
     }
 })
 

@@ -1,3 +1,4 @@
+import { cardSubmitButton } from "./index.js";
 export default class Popup{
     constructor(selector){
         this._selector = selector;
@@ -25,7 +26,7 @@ export default class Popup{
         if (evt.target.classList.contains("popup_opened")) {
             //const openedPopup = document.querySelector(".popup_opened");
             
-            this._popupElement.close();
+            this.close();
             
             
         }
@@ -34,6 +35,16 @@ export default class Popup{
     _handleEscClose(evt){
         if (evt.key === "Escape") {
             this.close(document.querySelector(".popup_opened"));
+        }
+    }
+
+    renderLoading(isLoading, someButton) {
+        if (isLoading) {
+            someButton.textContent = "Сохранение...";
+        } else if (someButton === cardSubmitButton) {
+            someButton.textContent = "Создать";
+        } else {
+            someButton.textContent = "Сохранить";
         }
     }
 
