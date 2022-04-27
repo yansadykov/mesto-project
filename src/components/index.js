@@ -48,34 +48,45 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
         userinfo.setUserInfo(userData);
         profileImage.src = userData.avatar;
 
-        const cardsList = new Section({cardsData, 
+        const cardsList = new Section({items: cardsData, 
             renderer: (item) => {
-                const card = new Card(item, '#cardtemplate', handleCardClick, handleDeleteCard, handleLikes, userData._id);
+                const card = new Card({data: item, myId: userData._id}, '#card-template', handleCardClick, handleDeleteCard, handleLikes);
                 const cardElement =  card.generate();
                 cardsList.addItem(cardElement);
              }
         }, '.cards')
+
+        cardsList.renderItems();
+
+
+
     })
     .catch((err) => console.log(err));
 
 
 
+const imagePopup = new PopupWithImage('.popup-pic-open');
+
 function handleCardClick(cardData) {
     imagePopup.open(cardData);
+    
 } 
 
+
+
 function handleDeleteCard(evt, cardId) {
-    removeCardServer(cardId)
+    api.removeCardServer(cardId)
         .then(() => {
             evt.target.closest(".card-item").remove();
         })
         .catch((err) => console.log(err));
 }
 
+
 function handleLikes(likeButton, cardLikes, cardInfo, myId) {
     const method = cardInfo.likes.some((like) => like._id === myId) !== false ? "DELETE" : "PUT";
 
-    handleLikesServer(cardInfo, method)
+    api.handleLikesServer(cardInfo, method)
         .then((data) => {
             cardInfo.likes = data.likes;
             cardLikes.textContent = cardInfo.likes.length;
@@ -91,7 +102,7 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
 
 
 
-const imagePopup = new PopupWithImage('.popup-pic-open');
+
 
 
 
@@ -103,7 +114,7 @@ const editProfilePopup = new PopupWithForm('.profile-popup', {
                 profileTitle.textContent = data.name;
                 profileSubtitle.textContent = data.description;
     
-                editProfilePopup.close();
+                editProfilePopup.setEventListeners();
             })
             .catch((err) => console.log(err))
             .finally(() => renderLoading(false, profileSubmitButton));
@@ -115,6 +126,7 @@ editProfileButton.addEventListener('click', () =>{
     usernameInfo.value = profileSubtitle.textContent;
     editProfilePopup.open();
 });
+
 
 
 
