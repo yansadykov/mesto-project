@@ -136,15 +136,17 @@ editProfileButton.addEventListener('click', () => {
 const editProfilePicPopup = new PopupWithForm('.popup-profilepic', { 
     handleFormSubmit: (formData) => {
         editProfilePicPopup.renderLoading(true, profilePicSubmitButton);
-        api.setAvatar(formData)
+        api.setAvatar(formData.link )
             .then((data) => {
                 profileImage.src = data.avatar;
                 editProfilePicPopup.close();
+                console.log(formData);
             })
             .catch((err) => console.log(err))
             .finally(() => editProfilePicPopup.renderLoading(false, profilePicSubmitButton));
     }
 });
+editProfilePicPopup.setEventListeners();
 
 editProfilePicButton.addEventListener('click', () => {
     editProfilePicPopup.open();
@@ -171,6 +173,8 @@ const addCardPopup = new PopupWithForm('.new-card-popup', {
             .finally(() => addCardPopup.renderLoading(false, cardSubmitButton));
     }
 })
+
+addCardPopup.setEventListeners();
 
 addCardButton.addEventListener('click', () => {
     addCardPopup.open();
