@@ -9,5 +9,7 @@ export default class PopupWithImage extends Popup {
         this._popupElement.querySelector('.popup-picture__img').alt = cardData.name;
         this._popupElement.querySelector('.popup-picture__img').src = cardData.link;
         this._popupElement.querySelector('.popup-picture__title').textContent = cardData.name;
+        super.open();
     }
+
 }
