@@ -1,3 +1,4 @@
+import { cardSubmitButton } from "./constants.js";
 import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup{
@@ -19,6 +20,16 @@ export default class PopupWithForm extends Popup{
       
         return this._formValues;
     } 
+
+    renderLoading(isLoading, someButton) {
+        if (isLoading) {
+            someButton.textContent = "Сохранение...";
+        } else if (someButton === cardSubmitButton) {
+            someButton.textContent = "Создать";
+        } else {
+            someButton.textContent = "Сохранить";
+        }
+    }
       
     setEventListeners(){
         super.setEventListeners();  

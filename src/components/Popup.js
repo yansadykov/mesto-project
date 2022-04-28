@@ -1,4 +1,3 @@
-import { cardSubmitButton } from "./index.js";
 export default class Popup{
     constructor(selector){
         this._selector = selector;
@@ -20,23 +19,10 @@ export default class Popup{
           document.querySelector(".popup_opened").classList.remove("popup_opened");
         }
       }
-
-      renderLoading(isLoading, someButton) {
-        if (isLoading) {
-            someButton.textContent = "Сохранение...";
-        } else if (someButton === cardSubmitButton) {
-            someButton.textContent = "Создать";
-        } else {
-            someButton.textContent = "Сохранить";
-        }
-    }
     
       setEventListeners() {
         this._popupElement.addEventListener("mousedown", (evt) => {
-          if (evt.target.classList.contains("popup_opened")) {
-            this.close();
-          }
-          if (evt.target.classList.contains("popup__close-btn")) {
+          if (evt.target.classList.contains("popup_opened") || evt.target.classList.contains("popup__close-btn")) {
             this.close();
           }
         });
