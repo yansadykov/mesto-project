@@ -34,7 +34,7 @@ class Api{
             method: "PATCH",
             headers: this._headers,
             body: JSON.stringify({
-                avatar: `${piclink}`,
+                avatar: piclink,
             }),
         }).then((res) => { return this._checkResponse(res)});
     }

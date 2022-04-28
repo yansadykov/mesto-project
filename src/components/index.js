@@ -73,8 +73,8 @@ const imagePopup = new PopupWithImage('.popup-pic-open');
 
 function handleCardClick(cardData) {
     imagePopup.open(cardData);
-    
-} 
+}
+imagePopup.setEventListeners();
 
 
 
@@ -140,7 +140,6 @@ const editProfilePicPopup = new PopupWithForm('.popup-profilepic', {
             .then((data) => {
                 profileImage.src = data.avatar;
                 editProfilePicPopup.close();
-                console.log(formData);
             })
             .catch((err) => console.log(err))
             .finally(() => editProfilePicPopup.renderLoading(false, profilePicSubmitButton));
@@ -159,12 +158,12 @@ const addCardPopup = new PopupWithForm('.new-card-popup', {
         addCardPopup.renderLoading(true, cardSubmitButton);
         api.addNewCard(placeInput.value, imageInput.value)
             .then((card) => {
-                const addedCard = new Card(card, '#cardtemplate', handleCardClick, handleDeleteCard, handleLikes, card.owner._id);
+                const addedCard = new Card({data: card, myId: card.owner._id}, '#card-template', handleCardClick, handleDeleteCard, handleLikes);
                 const cardElement = addedCard.generate();
                 elements.prepend(cardElement);
             })
             .then(() => {
-                closePopup(addCardPopup);
+                addCardPopup.close();
                 addCardForm.reset();
                 cardSubmitButton.classList.add("form__save_inactive");
                 cardSubmitButton.disabled = true;
