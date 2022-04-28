@@ -76,6 +76,8 @@ function handleCardClick(cardData) {
     
 } 
 
+imagePopup.setEventListeners();
+
 
 
 function handleDeleteCard(evt, cardId) {
