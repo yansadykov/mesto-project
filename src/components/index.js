@@ -37,7 +37,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 
 
 
-
+const imagePopup = new PopupWithImage('.popup-pic-open');
 
 function handleCardClick(cardData) {
     imagePopup.open(cardData);
@@ -69,13 +69,6 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
         })
         .catch((err) => console.log(err));
 }
-
-
-
-
-const imagePopup = new PopupWithImage('.popup-pic-open');
-imagePopup.setEventListeners();
-
 
 const editProfilePopup = new PopupWithForm('.profile-popup', {
     handleFormSubmit: (formData) => {
