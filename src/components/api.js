@@ -8,9 +8,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: this._headers,
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
+    }).then(this._checkResponse);
   }
 
   setUserInfo(formData) {
@@ -21,31 +19,25 @@ class Api {
         name: formData.name,
         about: formData.about,
       }),
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
+    }).then(this._checkResponse);
   }
 
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       method: "GET",
       headers: this._headers,
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
+    }).then(this._checkResponse);
   }
 
-  setAvatar(piclink) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar: `${piclink}`,
-      }),
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
-  }
+    setAvatar(piclink){
+        return fetch(`${this._baseUrl}/users/me/avatar`, {
+            method: "PATCH",
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar: piclink,
+            }),
+          }).then(this._checkResponse);
+    }
 
   addNewCard(placename, imagelink) {
     return fetch(`${this._baseUrl}/cards`, {
@@ -55,27 +47,21 @@ class Api {
         name: placename,
         link: `${imagelink}`,
       }),
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
+    }).then(this._checkResponse);
   }
 
   removeCardServer(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
+    }).then(this._checkResponse);
   }
 
   handleLikesServer(cardInfo, method) {
     return fetch(`${this._baseUrl}/cards/likes/${cardInfo._id}`, {
       method: method,
       headers: this._headers,
-    }).then((res) => {
-      return this._checkResponse(res);
-    });
+    }).then(this._checkResponse);
   }
 
   _checkResponse(res) {

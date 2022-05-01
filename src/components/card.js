@@ -31,47 +31,39 @@ export default class Card {
   generate() {
     this._element = this._getElement();
 
-    const cardTitle = this._element.querySelector(".card__title");
-    const cardImage = this._element.querySelector(".card__img");
-    const cardDeleteButton = this._element.querySelector(".card__delete");
-    const cardLikeButton = this._element.querySelector(".card__like");
-    const cardLikes = this._element.querySelector(".card__like-count");
-    cardLikes.textContent = this._cardInfo.likes.length;
+    this._cardTitle = this._element.querySelector(".card__title");
+    this._cardImage = this._element.querySelector(".card__img");
+    this._cardDeleteButton = this._element.querySelector(".card__delete");
+    this._cardLikeButton = this._element.querySelector(".card__like");
+    this._cardLikes = this._element.querySelector(".card__like-count");
+    this._cardLikes.textContent = this._cardInfo.likes.length;
 
-    cardImage.src = this._link;
-    cardTitle.textContent = this._name;
-    cardTitle.alt = this._name;
+    this._cardImage.src = this._link;
+    this._cardTitle.textContent = this._name;
+    this._cardTitle.alt = this._name;
 
     if (this._cardInfo.likes.some((like) => like._id === this._myId)) {
-      cardLikeButton.classList.add("card__like_active");
+      this._cardLikeButton.classList.add("card__like_active");
     }
 
     if (this._ownerId !== this._myId) {
-      cardDeleteButton.style.display = "none";
+      this._cardDeleteButton.style.display = "none";
     }
 
-    this._deleteEventListeners(cardDeleteButton);
-
-    this._likeEventListeners(cardLikeButton, cardLikes);
-
-    this._imageOpenEventListeners(cardImage);
+    this._setEventListeners(this._cardDeleteButton, this._cardLikeButton, this._cardLikes, this._cardImage);
 
     return this._element;
   }
 
-  _deleteEventListeners(cardDeleteButton) {
+  _setEventListeners(cardDeleteButton, cardLikeButton, cardLikes, cardImage){
     cardDeleteButton.addEventListener("click", (evt) => {
       this._handleDeleteCard(evt, this._id);
     });
-  }
 
-  _likeEventListeners(cardLikeButton, cardLikes) {
     cardLikeButton.addEventListener("click", () => {
       this._handleLikes(cardLikeButton, cardLikes, this._cardInfo, this._myId);
     });
-  }
 
-  _imageOpenEventListeners(cardImage) {
     cardImage.addEventListener("click", () => {
       this._handleCardClick(this._cardInfo);
     });

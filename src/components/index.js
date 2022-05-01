@@ -33,36 +33,34 @@ const userinfo = new UserInfo({
 });
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
-  .then(([userData, cardsData]) => {
-    userinfo.setUserInfo(userData);
+    .then(([userData, cardsData]) => {
+        userinfo.setUserInfo(userData);
+        
+        profileImage.src = userData.avatar;
 
-    profileImage.src = userData.avatar;
+        const cardsList = new Section({items: cardsData, 
+            renderer: (item) => {
+                const card = new Card({data: item, myId: userData._id}, '#card-template', handleCardClick, handleDeleteCard, handleLikes);
+                const cardElement = card.generate();
+                cardsList.addItem(cardElement);
+             }
+        }, '.cards')
 
-    const cardsList = new Section(
-      {
-        items: cardsData,
-        renderer: (item) => {
-          const card = new Card(
-            { data: item, myId: userData._id },
-            "#card-template",
-            handleCardClick,
-            handleDeleteCard,
-            handleLikes
-          );
-          const cardElement = card.generate();
-          cardsList.addItem(cardElement);
-        },
-      },
-      ".cards"
-    );
+        cardsList.renderItems();
 
-    cardsList.renderItems();
-  })
-  .catch((err) => console.log(err));
+
+
+    })
+    .catch((err) => console.log(err));
+
+
+
+const imagePopup = new PopupWithImage('.popup-pic-open');
 
 function handleCardClick(cardData) {
-  imagePopup.open(cardData);
+    imagePopup.open(cardData);
 }
+imagePopup.setEventListeners();
 
 function handleDeleteCard(evt, cardId) {
   api
@@ -94,22 +92,16 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
     .catch((err) => console.log(err));
 }
 
-const imagePopup = new PopupWithImage(".popup-pic-open");
-imagePopup.setEventListeners();
-
-const editProfilePopup = new PopupWithForm(".profile-popup", {
-  handleFormSubmit: (formData) => {
-    editProfilePopup.renderLoading(true, profileSubmitButton);
-    api
-      .setUserInfo(formData)
-      .then((data) => {
-        userinfo.setUserInfo(data);
-      })
-      .catch((err) => console.log(err))
-      .finally(() =>
-        editProfilePopup.renderLoading(false, profileSubmitButton)
-      );
-  },
+const editProfilePopup = new PopupWithForm('.profile-popup', renderLoading, {
+    handleFormSubmit: (formData) => {
+        renderLoading(true, profileSubmitButton);
+        api.setUserInfo(formData)
+            .then((data) => {
+            userinfo.setUserInfo(data);
+            })
+            .catch((err) => console.log(err))
+            .finally(() => renderLoading(false, profileSubmitButton));
+    }
 });
 editProfilePopup.setEventListeners();
 
@@ -120,21 +112,20 @@ editProfileButton.addEventListener("click", () => {
   editProfilePopup.open();
 });
 
-const editProfilePicPopup = new PopupWithForm(".popup-profilepic", {
-  handleFormSubmit: (formData) => {
-    editProfilePicPopup.renderLoading(true, profilePicSubmitButton);
-    api
-      .setAvatar(formData.link)
-      .then((data) => {
-        profileImage.src = data.avatar;
-        editProfilePicPopup.close();
-        console.log(formData);
-      })
-      .catch((err) => console.log(err))
-      .finally(() =>
-        editProfilePicPopup.renderLoading(false, profilePicSubmitButton)
-      );
-  },
+
+
+
+const editProfilePicPopup = new PopupWithForm('.popup-profilepic', renderLoading, { 
+    handleFormSubmit: (formData) => {
+        renderLoading(true, profilePicSubmitButton);
+        api.setAvatar(formData.link )
+            .then((data) => {
+                profileImage.src = data.avatar;
+                editProfilePicPopup.close();
+            })
+            .catch((err) => console.log(err))
+            .finally(() => renderLoading(false, profilePicSubmitButton));
+    }
 });
 editProfilePicPopup.setEventListeners();
 
@@ -142,9 +133,29 @@ editProfilePicButton.addEventListener("click", () => {
   editProfilePicPopup.open();
 });
 
-const addCardPopup = new PopupWithForm(".new-card-popup", {
+function renderLoading(isLoading, someButton, buttonText){
+  if (isLoading) {
+    someButton.textContent = "Сохранение...";
+  } else if (buttonText === "Создать") {
+    someButton.textContent = "Создать";
+  } else {
+    someButton.textContent = "Сохранить";
+  }
+}
+
+// function renderLoading(isLoading, someButton) {
+//   if (isLoading) {
+//       someButton.textContent = "Сохранение...";
+//   } else if (someButton === cardSubmitButton) {
+//       someButton.textContent = "Создать";
+//   } else {
+//       someButton.textContent = "Сохранить";
+//   }
+// }
+
+const addCardPopup = new PopupWithForm(".new-card-popup", renderLoading, {
   handleFormSubmit: (formData) => {
-    addCardPopup.renderLoading(true, cardSubmitButton);
+    renderLoading(true, cardSubmitButton, "Создать");
     api
       .addNewCard(placeInput.value, imageInput.value)
       .then((card) => {
@@ -165,7 +176,7 @@ const addCardPopup = new PopupWithForm(".new-card-popup", {
         cardSubmitButton.disabled = true;
       })
       .catch((err) => console.log(err))
-      .finally(() => addCardPopup.renderLoading(false, cardSubmitButton));
+      .finally(() => renderLoading(false, cardSubmitButton, "Создать"));
   },
 });
 
