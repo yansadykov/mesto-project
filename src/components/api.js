@@ -57,8 +57,8 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  handleLikesServer(cardInfo, method) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardInfo._id}`, {
+  handleLikesServer(cardId, method) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: method,
       headers: this._headers,
     }).then(this._checkResponse);

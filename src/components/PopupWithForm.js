@@ -10,8 +10,6 @@ export default class PopupWithForm extends Popup {
   }
 
   _getInputValues() {
-    
-
     this._formValues = {};
 
     this._inputList.forEach((input) => {
@@ -34,4 +32,11 @@ export default class PopupWithForm extends Popup {
     super.close();
     this._form.reset();
   }
+
+  open(){
+    super.open();
+    this._submitButton.classList.add("form__save_inactive");
+    this._submitButton.disabled = true;
+  }
+
 }

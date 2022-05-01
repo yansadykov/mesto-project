@@ -50,21 +50,35 @@ export default class Card {
       this._cardDeleteButton.style.display = "none";
     }
 
-    this._setEventListeners(this._cardDeleteButton, this._cardLikeButton, this._cardLikes, this._cardImage);
+    this._setEventListeners;
 
     return this._element;
   }
 
-  _setEventListeners(cardDeleteButton, cardLikeButton, cardLikes, cardImage){
-    cardDeleteButton.addEventListener("click", (evt) => {
+  updateLikes(res){
+      this._cardInfo.likes = res.likes;
+      this._cardLikes.textContent = res.likes.length;
+      if (this._cardInfo.likes.some((like) => like._id === this._myId)) {
+        this._cardLikeButton.classList.add("card__like_active");
+        } else {
+          this._cardLikeButton.classList.remove("card__like_active");
+        }
+  }
+
+  getId(){
+    return this._id; //card id
+  }
+
+  _setEventListeners(){
+    this._cardDeleteButton.addEventListener("click", (evt) => {
       this._handleDeleteCard(evt, this._id);
     });
 
-    cardLikeButton.addEventListener("click", () => {
-      this._handleLikes(cardLikeButton, cardLikes, this._cardInfo, this._myId);
+    this._cardLikeButton.addEventListener("click", () => {
+      this._handleLikes(this);
     });
 
-    cardImage.addEventListener("click", () => {
+    this._cardImage.addEventListener("click", () => {
       this._handleCardClick(this._cardInfo);
     });
   }

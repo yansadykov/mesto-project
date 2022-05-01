@@ -52,8 +52,6 @@ function renderer(item, myId){
 
 
 
-
-
 function handleCardClick(cardData) {
     imagePopup.open(cardData);
 }
@@ -68,23 +66,16 @@ function handleDeleteCard(evt, cardId) {
     .catch((err) => console.log(err));
 }
 
-function handleLikes(likeButton, cardLikes, cardInfo, myId) {
+function handleLikes(card) {
   const method =
-    cardInfo.likes.some((like) => like._id === myId) !== false
+    card._likes.some((like) => like._id === card._myId) !== false
       ? "DELETE"
       : "PUT";
 
   api
-    .handleLikesServer(cardInfo, method)
-    .then((data) => {
-      cardInfo.likes = data.likes;
-      cardLikes.textContent = cardInfo.likes.length;
-
-      if (cardInfo.likes.some((like) => like._id === myId)) {
-        likeButton.classList.add("card__like_active");
-      } else {
-        likeButton.classList.remove("card__like_active");
-      }
+    .handleLikesServer(card._id, method)
+    .then((res) => {
+     card.updateLikes(res);
     })
     .catch((err) => console.log(err));
 }
@@ -164,9 +155,6 @@ const addCardPopup = new PopupWithForm(".new-card-popup", renderLoading, {
       })
       .then(() => {
         addCardPopup.close();
-        addCardForm.reset();
-        cardSubmitButton.classList.add("form__save_inactive");
-        cardSubmitButton.disabled = true;
       })
       .catch((err) => console.log(err))
       .finally(() => renderLoading(false, cardSubmitButton, "Создать"));
