@@ -30,32 +30,29 @@ import {
 const userinfo = new UserInfo({
   usernameElementSelector: ".profile__title",
   usernameInfoElementSelector: ".profile__subtitle",
+  userAvatarSelector: ".profile__avatar",
 });
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(([userData, cardsData]) => {
         userinfo.setUserInfo(userData);
-        
-        profileImage.src = userData.avatar;
-
-        const cardsList = new Section({items: cardsData, 
-            renderer: (item) => {
-                const card = new Card({data: item, myId: userData._id}, '#card-template', handleCardClick, handleDeleteCard, handleLikes);
-                const cardElement = card.generate();
-                cardsList.addItem(cardElement);
-             }
-        }, '.cards')
-
-        cardsList.renderItems();
-
-
-
+        const cardsList = new Section({items: cardsData, myId: userData._id}, renderer,  '.cards')
+        cardsList.renderItems()
     })
     .catch((err) => console.log(err));
 
 
 
 const imagePopup = new PopupWithImage('.popup-pic-open');
+
+
+function renderer(item, myId){
+  return new Card({data: item, myId}, '#card-template', handleCardClick, handleDeleteCard, handleLikes).generate();
+}
+
+
+
+
 
 function handleCardClick(cardData) {
     imagePopup.open(cardData);
@@ -92,12 +89,23 @@ function handleLikes(likeButton, cardLikes, cardInfo, myId) {
     .catch((err) => console.log(err));
 }
 
+function renderLoading(isLoading, someButton, buttonText){
+  if (isLoading) {
+    someButton.textContent = "Сохранение...";
+  } else if (someButton.textContent === buttonText) {
+    someButton.textContent = "Создать";
+  } else {
+    someButton.textContent = "Сохранить";
+  }
+}
+
 const editProfilePopup = new PopupWithForm('.profile-popup', renderLoading, {
     handleFormSubmit: (formData) => {
         renderLoading(true, profileSubmitButton);
         api.setUserInfo(formData)
             .then((data) => {
             userinfo.setUserInfo(data);
+            editProfilePopup.close();
             })
             .catch((err) => console.log(err))
             .finally(() => renderLoading(false, profileSubmitButton));
@@ -109,6 +117,7 @@ editProfileButton.addEventListener("click", () => {
   const newData = userinfo.getUserInfo();
   username.value = newData.name;
   usernameInfo.value = newData.about;
+  profileImage.src = newData.avatar;
   editProfilePopup.open();
 });
 
@@ -118,7 +127,7 @@ editProfileButton.addEventListener("click", () => {
 const editProfilePicPopup = new PopupWithForm('.popup-profilepic', renderLoading, { 
     handleFormSubmit: (formData) => {
         renderLoading(true, profilePicSubmitButton);
-        api.setAvatar(formData.link )
+        api.setAvatar(formData.link)
             .then((data) => {
                 profileImage.src = data.avatar;
                 editProfilePicPopup.close();
@@ -133,15 +142,7 @@ editProfilePicButton.addEventListener("click", () => {
   editProfilePicPopup.open();
 });
 
-function renderLoading(isLoading, someButton, buttonText){
-  if (isLoading) {
-    someButton.textContent = "Сохранение...";
-  } else if (buttonText === "Создать") {
-    someButton.textContent = "Создать";
-  } else {
-    someButton.textContent = "Сохранить";
-  }
-}
+
 
 // function renderLoading(isLoading, someButton) {
 //   if (isLoading) {
@@ -159,15 +160,7 @@ const addCardPopup = new PopupWithForm(".new-card-popup", renderLoading, {
     api
       .addNewCard(placeInput.value, imageInput.value)
       .then((card) => {
-        const addedCard = new Card(
-          { data: card, myId: card.owner._id },
-          "#card-template",
-          handleCardClick,
-          handleDeleteCard,
-          handleLikes
-        );
-        const cardElement = addedCard.generate();
-        elements.prepend(cardElement);
+        elements.prepend(renderer(card, card.owner._id));
       })
       .then(() => {
         addCardPopup.close();

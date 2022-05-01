@@ -1,4 +1,4 @@
-import { cardSubmitButton } from "./constants.js";
+//import { cardSubmitButton } from "./constants.js";
 import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup {
@@ -10,7 +10,7 @@ export default class PopupWithForm extends Popup {
   }
 
   _getInputValues() {
-    this._inputList = this._form.querySelectorAll(".form__input");
+    
 
     this._formValues = {};
 
@@ -23,10 +23,10 @@ export default class PopupWithForm extends Popup {
 
   setEventListeners() {
     super.setEventListeners();
+    this._inputList = this._form.querySelectorAll(".form__input");
     this._form.addEventListener("submit", (evt) => {
       evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
-      this.close();
     });
   }
 
