@@ -43,20 +43,6 @@ export default class Card {
     this._cardLikes.textContent = likes.length;
   }
 
-  // updateLikes(res){
-  //     this._cardInfo.likes = res.likes;
-  //     this._cardLikes.textContent = res.likes.length;
-  //     if (this._cardInfo.likes.some((like) => like._id === this._myId)) {
-  //       this._cardLikeButton.classList.add("card__like_active");
-  //       } else {
-  //         this._cardLikeButton.classList.remove("card__like_active");
-  //       }
-  // }
-
-  // getId(){
-  //   return this._id; //card id
-  // }
-
   _setEventListeners(){
     this._cardDeleteButton.addEventListener("click", (evt) => {
       this._handleDeleteCard(evt, this._id);
