@@ -50,16 +50,23 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  removeCardServer(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+  removeCardServer(id) {
+    return fetch(`${this._baseUrl}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
     }).then(this._checkResponse);
   }
 
-  handleLikesServer(cardId, method) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-      method: method,
+  likeCard(id) {
+    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
+      method: "PUT",
+      headers: this._headers,
+    }).then(this._checkResponse);
+  }
+
+  dislikeCard(id) {
+    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
+      method: "DELETE",
       headers: this._headers,
     }).then(this._checkResponse);
   }

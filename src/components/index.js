@@ -47,7 +47,7 @@ const imagePopup = new PopupWithImage('.popup-pic-open');
 
 
 function renderer(item, myId){
-  return new Card({data: item, myId}, '#card-template', handleCardClick, handleDeleteCard, handleLikes).generate();
+  return new Card({data: item, myId}, '#card-template', handleCardClick, handleDeleteCard, handleAddLikes, handleRemoveLikes).generate();
 }
 
 
@@ -66,19 +66,35 @@ function handleDeleteCard(evt, cardId) {
     .catch((err) => console.log(err));
 }
 
-function handleLikes(card) {
-  const method =
-    card._likes.some((like) => like._id === card._myId) !== false
-      ? "DELETE"
-      : "PUT";
-
-  api
-    .handleLikesServer(card._id, method)
-    .then((res) => {
-     card.updateLikes(res);
-    })
-    .catch((err) => console.log(err));
+function handleAddLikes() {
+  api.likeCard(this._id)
+  .then((cardData) => {
+    this.countLikes(cardData.likes);
+  })
+  .catch((err) => console.log(err));
 }
+
+function handleRemoveLikes() {
+  api.dislikeCard(this._id)
+  .then((cardData) => {
+    this.countLikes(cardData.likes);
+  })
+  .catch((err) => console.log(err));
+}
+
+// function handleLikes(card) {
+//   const method =
+//     card._likes.some((like) => like._id === card._myId) !== false
+//       ? "DELETE"
+//       : "PUT";
+
+//   api
+//     .handleLikesServer(card._id, method)
+//     .then((res) => {
+//      card.updateLikes(res);
+//     })
+//     .catch((err) => console.log(err));
+// }
 
 function renderLoading(isLoading, someButton, buttonText){
   if (isLoading) {
