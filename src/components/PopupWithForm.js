@@ -1,7 +1,7 @@
 import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup {
-  constructor(selector, renderLoading,{ handleFormSubmit }) {
+  constructor(selector, renderLoading, { handleFormSubmit }) {
     super(selector);
     this._handleFormSubmit = handleFormSubmit;
     this._form = this._popupElement.querySelector(".form");
@@ -32,10 +32,9 @@ export default class PopupWithForm extends Popup {
     this._form.reset();
   }
 
-  open(){
+  open() {
     super.open();
     this._submitButton.classList.add("form__save_inactive");
     this._submitButton.disabled = true;
   }
-
 }
