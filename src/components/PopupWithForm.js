@@ -31,10 +31,4 @@ export default class PopupWithForm extends Popup {
     super.close();
     this._form.reset();
   }
-
-  open() {
-    super.open();
-    this._submitButton.classList.add("form__save_inactive");
-    this._submitButton.disabled = true;
-  }
 }

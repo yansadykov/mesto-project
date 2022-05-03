@@ -23,6 +23,7 @@ export default class UserInfo {
     this._usernameElement.textContent = data.name;
     this._usernameInfoElement.textContent = data.about;
     this._userAvatarElement.src = data.avatar;
+    this._userId = data._id;
   }
 
   getUserInfo() {
@@ -30,6 +31,7 @@ export default class UserInfo {
       name: this._usernameElement.textContent,
       about: this._usernameInfoElement.textContent,
       avatar: this._userAvatarElement.src,
+      _id: this._userId,
     };
   }
 }

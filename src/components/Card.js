@@ -29,17 +29,9 @@ export default class Card {
 
     return cardElement;
   }
-
-  _handleCardLikes() {
-    this._cardLikeButton.classList.toggle("card__like_active");
-    if (this._cardLikeButton.classList.contains("card__like_active")) {
-      this._handleAddLikes(this);
-    } else {
-      this._handleRemoveLikes(this);
-    }
-  }
-
+  
   countLikes(likes) {
+    this._likes = likes;
     this._cardLikes.textContent = likes.length;
   }
 
@@ -49,8 +41,12 @@ export default class Card {
     });
 
     this._cardLikeButton.addEventListener("click", () => {
-      this._handleCardLikes();
-    });
+      if (this._cardLikeButton.classList.contains("card__like_active")) {
+        this._handleRemoveLikes(this);
+      } else {
+        this._handleAddLikes(this);
+    }
+  });
 
     this._cardImage.addEventListener("click", () => {
       this._handleCardClick(this._cardInfo);

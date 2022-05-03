@@ -71,20 +71,22 @@ function handleDeleteCard(evt, cardId) {
     .catch((err) => console.log(err));
 }
 
-function handleAddLikes() {
+function handleAddLikes(somecard) {
   api
-    .likeCard(this._id)
+    .likeCard(somecard._id)
     .then((cardData) => {
-      this.countLikes(cardData.likes);
+      somecard._cardLikeButton.classList.add("card__like_active");
+      somecard.countLikes(cardData.likes);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err)); 
 }
 
-function handleRemoveLikes() {
+function handleRemoveLikes(somecard) {
   api
-    .dislikeCard(this._id)
+    .dislikeCard(somecard._id)
     .then((cardData) => {
-      this.countLikes(cardData.likes);
+      somecard._cardLikeButton.classList.remove("card__like_active");
+      somecard.countLikes(cardData.likes);
     })
     .catch((err) => console.log(err));
 }
@@ -108,8 +110,8 @@ editProfileButton.addEventListener("click", () => {
   const newData = userinfo.getUserInfo();
   username.value = newData.name;
   usernameInfo.value = newData.about;
-  profileImage.src = newData.avatar;
   editProfilePopup.open();
+  editProfilePicFormValidator.resetValidation();
 });
 
 const editProfilePicPopup = new PopupWithForm(
@@ -121,7 +123,7 @@ const editProfilePicPopup = new PopupWithForm(
       api
         .setAvatar(formData.link)
         .then((data) => {
-          profileImage.src = data.avatar;
+          userinfo.setUserInfo(data);
           editProfilePicPopup.close();
         })
         .catch((err) => console.log(err))
@@ -133,6 +135,7 @@ editProfilePicPopup.setEventListeners();
 
 editProfilePicButton.addEventListener("click", () => {
   editProfilePicPopup.open();
+  editProfilePicFormValidator.resetValidation();
 });
 
 const addCardPopup = new PopupWithForm(".new-card-popup", renderLoading, {
@@ -155,6 +158,7 @@ addCardPopup.setEventListeners();
 
 addCardButton.addEventListener("click", () => {
   addCardPopup.open();
+  addCardFormValidator.resetValidation();
 });
 
 const profileFormValidator = new FormValidator(settings, profileForm);
