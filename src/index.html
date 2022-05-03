@@ -54,7 +54,7 @@
                     <fieldset class="form__set">
                         <input class="form__user-info form__input" type="text" name="name" id="username" placeholder="Имя" minlength="2" maxlength="40" required />
                         <span class="form__input-error username-error" id="username-error"></span>
-                        <input class="form__user-info form__input" type="text" name="description" id="usernameinfo" placeholder="О себе" minlength="2" maxlength="200" required />
+                        <input class="form__user-info form__input" type="text" name="about" id="usernameinfo" placeholder="О себе" minlength="2" maxlength="200" required />
                         <span class="form__input-error usernameinfo-error" id="usernameinfo-error"></span>
 
                         <button class="form__save form__submit form__button-submit profilesubmitbutton" id="profilesubmitbutton" type="submit">Сохранить</button>
@@ -63,15 +63,15 @@
             </div>
         </div>
 
-        <div class="popup" id="item-form">
+        <div class="popup new-card-popup" id="item-form">
             <div class="popup__window">
                 <button class="popup__close-btn" id="photo-close-btn" type="button"></button>
                 <h2 class="popup__title">Новое место</h2>
                 <form class="form" name="user-info" id="new-card-form">
                     <fieldset class="form__set">
-                        <input class="form__user-info form__input" id="placename" type="text" name="placename" placeholder="Название" minlength="2" maxlength="30" required />
+                        <input class="form__user-info form__input" id="placename" type="text" name="name" placeholder="Название" minlength="2" maxlength="30" required />
                         <span class="form__input-error placename-error" id="placename-error"></span>
-                        <input class="form__user-info form__input" id="imagelink" type="url" name="imagelink" placeholder="Ссылка на картинку" required />
+                        <input class="form__user-info form__input" id="imagelink" type="url" name="link" placeholder="Ссылка на картинку" required />
                         <span class="form__input-error imagelink-error" id="imagelink-error"></span>
 
                         <button class="form__save form__submit form__button-submit" type="submit" id="addcardbutton">Создать</button>
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <div class="popup" id="popup-pic-open">
+        <div class="popup popup-pic-open">
             <div class="popup-picture">
                 <button class="popup__close-btn popup-picture__close-btn" type="button"></button>
                 <img class="popup-picture__img" src="" alt="" />
@@ -93,7 +93,7 @@
                 <h2 class="popup__title">Обновить аватар</h2>
                 <form class="form" name="form" id="profilepicform">
                     <fieldset class="form__set">
-                        <input type="url" name="profilepicture" id="profilepicture" class="form__input form__user-info" placeholder="Ссылка на картинку" required />
+                        <input type="url" name="link" id="profilepicture" class="form__input form__user-info" placeholder="Ссылка на картинку" required />
                         <span class="form__input-error profilepicture-error" id="profilepicture-error"></span>
                     </fieldset>
                     <button type="submit" class="form__save form__button-submit form__button-addpic" id="profilepicsubmitbutton">
