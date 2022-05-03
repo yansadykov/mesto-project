@@ -10,10 +10,8 @@ import PopupWithImage from "./PopupWithImage.js";
 import { renderLoading } from "./utils.js";
 
 import {
-  elements,
   username,
   usernameInfo,
-  profileImage,
   profileForm,
   editProfilePicForm,
   addCardForm,
@@ -32,15 +30,24 @@ const userinfo = new UserInfo({
   userAvatarSelector: ".profile__avatar",
 });
 
+const profileFormValidator = new FormValidator(settings, profileForm);
+profileFormValidator.enableValidation();
+
+const editProfilePicFormValidator = new FormValidator(
+  settings,
+  editProfilePicForm
+);
+editProfilePicFormValidator.enableValidation();
+
+const addCardFormValidator = new FormValidator(settings, addCardForm);
+addCardFormValidator.enableValidation();
+
+const cardsList = new Section(renderer, ".cards");
+
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, cardsData]) => {
     userinfo.setUserInfo(userData);
-    const cardsList = new Section(
-      { items: cardsData, myId: userData._id },
-      renderer,
-      ".cards"
-    );
-    cardsList.renderItems();
+    cardsList.renderItems(cardsData, userData._id);
   })
   .catch((err) => console.log(err));
 
@@ -144,7 +151,7 @@ const addCardPopup = new PopupWithForm(".new-card-popup", renderLoading, {
     api
       .addNewCard(formData.name, formData.link)
       .then((card) => {
-        elements.prepend(renderer(card, card.owner._id));
+        cardsList.addItem(card)
       })
       .then(() => {
         addCardPopup.close();
@@ -160,15 +167,3 @@ addCardButton.addEventListener("click", () => {
   addCardPopup.open();
   addCardFormValidator.resetValidation();
 });
-
-const profileFormValidator = new FormValidator(settings, profileForm);
-profileFormValidator.enableValidation();
-
-const editProfilePicFormValidator = new FormValidator(
-  settings,
-  editProfilePicForm
-);
-editProfilePicFormValidator.enableValidation();
-
-const addCardFormValidator = new FormValidator(settings, addCardForm);
-addCardFormValidator.enableValidation();
