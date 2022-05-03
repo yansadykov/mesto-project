@@ -78,22 +78,22 @@ function handleDeleteCard(evt, cardId) {
     .catch((err) => console.log(err));
 }
 
-function handleAddLikes(somecard) {
+function handleAddLikes(card) {
   api
-    .likeCard(somecard._id)
+    .likeCard(card._id)
     .then((cardData) => {
-      somecard._cardLikeButton.classList.add("card__like_active");
-      somecard.countLikes(cardData.likes);
+      card.addLike();
+      card.countLikes(cardData.likes);
     })
     .catch((err) => console.log(err)); 
 }
 
-function handleRemoveLikes(somecard) {
+function handleRemoveLikes(card) {
   api
-    .dislikeCard(somecard._id)
+    .dislikeCard(card._id)
     .then((cardData) => {
-      somecard._cardLikeButton.classList.remove("card__like_active");
-      somecard.countLikes(cardData.likes);
+      card.deleteLike();
+      card.countLikes(cardData.likes);
     })
     .catch((err) => console.log(err));
 }

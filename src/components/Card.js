@@ -29,6 +29,14 @@ export default class Card {
 
     return cardElement;
   }
+
+  addLike(){
+    this._cardLikeButton.classList.add("card__like_active");
+  }
+
+  deleteLike(){
+    this._cardLikeButton.classList.remove("card__like_active");
+  }
   
   countLikes(likes) {
     this._likes = likes;
