@@ -1,7 +1,7 @@
 {
   "name": "mesto-project",
   "version": "0.0.1",
-  "description": "lerning project",
+  "description": "learning project",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yansadykov/mesto-project.git"
+    "url": "git+https://github.com/daryamakavchik/mesto-project.git"
   },
-  "author": "sadykov nursultan",
+  "author": "darya makavchik, sadykov nursultan",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yansadykov/mesto-project/issues"
+    "url": "https://github.com/daryamakavchikmesto-project/issues"
   },
-  "homepage": "https://github.com/yansadykov/mesto-project#readme",
+  "homepage": "https://github.com/daryamakavchik/mesto-project#readme",
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
