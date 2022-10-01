@@ -16,6 +16,11 @@
   opacity: 0.6;
 }
 
+.profile__photo-add-btn:focus{
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
 @media screen and (max-width: 762px) {
   .profile__photo-add-btn {
       width: 282px;
